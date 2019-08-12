@@ -1,3 +1,7 @@
+/* Este código informa as rotas para acesso a Aplicação. 
+Created by: Anthue
+Date: 2019-08-06*/
+
 const express = require('express'); //importa a variável express
 const routes = express.Router(); 
 

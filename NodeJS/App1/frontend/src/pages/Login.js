@@ -1,10 +1,16 @@
+/* Este código faz referência a tela de login do aplicativo. 
+Created by: Anthue
+Date: 2019-08-07*/
+
 import React, {useState} from 'react';
 import './Login.css';
 
+// Rota da API
 import api from '../services/api';
 
 import logo from '../assets/logo.svg';
 
+// Validação do login do usuário através do username do Github
 export default function Login({ history }) {
     const [username, setUsername] = useState('');
 

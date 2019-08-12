@@ -1,3 +1,8 @@
+/* Este código valida os usuários e retira da tela os usuários que tem "like" ou "dislike" deixando
+apenas os usuários que ainda não foram avaliados.
+Created by: Anthue
+Date: 2019-08-07
+ */
 import React, {useEffect, useState} from "react";
 import './Main.css';
 import { Link } from "react-router-dom";
@@ -8,7 +13,9 @@ import logo from '../assets/logo.svg';
 import like from '../assets/like.svg';
 import dislike from '../assets/dislike.svg';
 
+ // Validação em tela.
 export default function Main({ match }) {
+    // Carrega os usuários do sistema
     const [users, setUsers] = useState([]);    
     useEffect(() => {
         async function loadUsers(){
@@ -22,6 +29,7 @@ export default function Main({ match }) {
         loadUsers();
     }, [match.params.id]);
 
+    // validação usuários com "like"
     async function handleLike(id) {
         await api.post(`/devs/${id}/likes`, null, {
             headers: {user: match.params.id}
@@ -30,6 +38,7 @@ export default function Main({ match }) {
         setUsers(users.filter(user => user._id !== id));
     }
 
+    // validação usuários com "dislike"
     async function handleDislike(id) {
         await api.post(`/devs/${id}/dislikes`, null, {
             headers: {user: match.params.id}
@@ -37,6 +46,9 @@ export default function Main({ match }) {
 
         setUsers(users.filter(user => user._id !== id));
     }
+
+    // Retorna usuários que não receberam "like"  ou "dislike"
+    // Usuários não avaliados. Carregar os dados: avatar, nome e bio.
     return (
     <div className="main-container">
         <Link to="/">
@@ -64,7 +76,7 @@ export default function Main({ match }) {
             ))}
         </ul>
         ) : (
-            <div className="empty">Acabou :(</div>
+            <div className="empty">Acabou :(</div> // se não tem usuários retorna esta msg.
         )}
     </div>
     )

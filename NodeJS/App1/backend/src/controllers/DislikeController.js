@@ -1,3 +1,6 @@
+/* Este código pesquisa os usuários que já receberam "dislike"
+Created by: Anthue
+Date: 2019-08-06*/
 const Dev = require('../models/Dev');
 
 module.exports = {
@@ -10,9 +13,7 @@ module.exports = {
 
         if (!targetDev) {
             return res.status(400).json({ error: 'Dev not exists'});
-        }
-
-        
+        }        
 
         loggedDev.dislikes.push(targetDev._id);
 

@@ -1,3 +1,8 @@
+/* Este código faz referência ao modelo Dev e gravação no MongoDB.
+Created by: Anthue
+Date: 2019-08-06*/
+
+// Mongoose para acesso banco de dados MongoDB.
 const { Schema, model } = require('mongoose');
 
 const DevSchema = new Schema({
