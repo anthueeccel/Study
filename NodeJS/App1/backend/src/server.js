@@ -9,8 +9,8 @@ const routes = require('./routes'); //importa o arquivo routes.js
 
 const server = express();
 
-// String de conexão com o banco de dados
-mongoose.connect('mongodb+srv://[user]:[password]@cluster0-3sp4a.mongodb.net/develop1?retryWrites=true&w=majority', {
+// String de conexão com o banco de dados. Deve0se incluir sua String de conexão com o MongoDB
+mongoose.connect('mongodb+srv://[user]:[password]@[url-db-access]?retryWrites=true&w=majority', {
     useNewUrlParser: true
 });
 
