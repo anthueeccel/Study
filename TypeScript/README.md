@@ -1,1 +1,1 @@
-Alura - TypeScript
+TypeScript I e II - projeto Negociações.
