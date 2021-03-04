@@ -1,8 +1,9 @@
 # studies
-#First codes
 #
 #
-#ConsoleApp1: C# .NET
+#TypeScript - typescript/alurabank
 #
-#NodeJS/App1: Node.JS
+#C# DotNet Framework - ConsoleApp1
+#
+#Node.JS - NodeJS/App1
 #
