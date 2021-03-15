@@ -44,6 +44,26 @@ System.register(["../views/index", "../models/index", "../helpers/decorators/ind
                 isDiaUtil(data) {
                     return data.getDay() == DiaDaSemana.Sabado || data.getDay() == DiaDaSemana.Domingo;
                 }
+                importaDados() {
+                    function isOk(response) {
+                        if (response.ok) {
+                            return response;
+                        }
+                        else {
+                            throw new Error(response.statusText);
+                        }
+                    }
+                    fetch('http://localhost:8080/dados')
+                        .then(response => isOk(response))
+                        .then(response => response.json())
+                        .then((data) => {
+                        data
+                            .map(dado => new index_2.Negociacao((new Date), dado.vezes, dado.montante))
+                            .forEach(negociacao => this._negociacoes.adicionar(negociacao));
+                        this._negociacoesView.update(this._negociacoes);
+                    })
+                        .catch(error => console.log(error.message));
+                }
             };
             __decorate([
                 index_3.domInject('#data')
