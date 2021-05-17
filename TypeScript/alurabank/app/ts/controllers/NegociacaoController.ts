@@ -54,7 +54,7 @@ export class NegociacaoController {
         imprimir(negociacao, this._negociacoes);
 
         /*depois de adicionar, atualiza a view novamente para refletir os dados*/
-        this._negociacoesView.update(this._negociacoes);        
+        this._negociacoesView.update(this._negociacoes);
     };
 
     private isDiaUtil(data: Date): boolean {
@@ -62,9 +62,9 @@ export class NegociacaoController {
     }
 
     @throttle()
-    importaDados() {
+    async importaDados() {
 
-        this._negociacaoService
+        const negociacoesParaImportar = await this._negociacaoService
             .obterNegociacoes(response => {
                 if (response.ok) {
                     return response;
@@ -72,24 +72,14 @@ export class NegociacaoController {
                     throw new Error(response.statusText);
                 }
             })
-            .then(negociacoesParaImportar => {
 
-                const negociacoesImportadas = this._negociacoes.paraArray();
+        const negociacoesImportadas = this._negociacoes.paraArray();
 
-                negociacoesParaImportar
-                    .filter(negociacao => !negociacoesImportadas.some(jaImportada => { 
-                        
-                        if (!jaImportada.ehIgual(negociacao)) {
-                            this._mensagemView.update('Não foi possível importar');                            
-                        }
-                    }))
-                    .forEach((negociacao) => this._negociacoes.adicionar(negociacao));
-                this._negociacoesView.update(this._negociacoes)
-                this._mensagemView.update('Registros importados com sucesso');
-            })
-            .catch(err => {                
-                console.log(err);
-            });
+        negociacoesParaImportar
+            .filter(negociacao => negociacoesImportadas
+            .forEach((negociacao) => this._negociacoes.adicionar(negociacao));
+        this._negociacoesView.update(this._negociacoes)
+        this._mensagemView.update('Registros importados com sucesso');
     }
 }
 
