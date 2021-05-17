@@ -1,8 +1,9 @@
 import { NegociacoesView, MensagemView } from '../views/index';
 import { Negociacoes, Negociacao } from '../models/index';
 import { domInject, throttle } from '../helpers/decorators/index';
-import { NegociacaoParcial } from '../models/NegociacaoParcial';
 import { NegociacaoService, ResponseHandler } from '../services/index';
+import { imprimir } from '../helpers/index';
+
 export class NegociacaoController {
 
 
@@ -29,7 +30,6 @@ export class NegociacaoController {
 
         let data = new Date(this._inputData.val().replace(/-/g, ','));
 
-
         if (this.isDiaUtil(data)) {
             this._mensagemView.update('Somente dia negociações em dias úteis');
             return;
@@ -41,11 +41,20 @@ export class NegociacaoController {
             parseFloat(this._inputValor.val())
         );
 
-        this._negociacoes.adicionar(negociacao);
+        negociacao.paraTexto();
+
+        if (!this._negociacoes.paraArray().some(begociacaoRegistrada => negociacao.ehIgual(begociacaoRegistrada))) {
+            this._negociacoes.adicionar(negociacao);
+            this._mensagemView.update('Negociação adicionada com sucesso!');
+        } else {
+            this._mensagemView.update('Registro duplicado');
+        }
+
+
+        imprimir(negociacao, this._negociacoes);
 
         /*depois de adicionar, atualiza a view novamente para refletir os dados*/
-        this._negociacoesView.update(this._negociacoes);
-        this._mensagemView.update('Negociação adicionada com sucesso!');
+        this._negociacoesView.update(this._negociacoes);        
     };
 
     private isDiaUtil(data: Date): boolean {
@@ -57,18 +66,30 @@ export class NegociacaoController {
 
         this._negociacaoService
             .obterNegociacoes(response => {
-            if (response.ok) {
-                return response;
-            } else {
-                throw new Error(response.statusText);
-            }
-        })        
-            .then(negociacoes => {
-                negociacoes.forEach((negociacao) => 
-                    this._negociacoes.adicionar(negociacao));
-                this._negociacoesView.update(this._negociacoes)
+                if (response.ok) {
+                    return response;
+                } else {
+                    throw new Error(response.statusText);
+                }
             })
-            .catch(err => console.log(err));
+            .then(negociacoesParaImportar => {
+
+                const negociacoesImportadas = this._negociacoes.paraArray();
+
+                negociacoesParaImportar
+                    .filter(negociacao => !negociacoesImportadas.some(jaImportada => { 
+                        
+                        if (!jaImportada.ehIgual(negociacao)) {
+                            this._mensagemView.update('Não foi possível importar');                            
+                        }
+                    }))
+                    .forEach((negociacao) => this._negociacoes.adicionar(negociacao));
+                this._negociacoesView.update(this._negociacoes)
+                this._mensagemView.update('Registros importados com sucesso');
+            })
+            .catch(err => {                
+                console.log(err);
+            });
     }
 }
 
