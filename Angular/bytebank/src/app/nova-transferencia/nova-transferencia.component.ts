@@ -11,6 +11,7 @@ export class NovaTransferenciaComponent {
 
   valor: number;
   destino: number;
+  data: Date;
 
   transferir() {
     console.log('Solicitada nova transferência');
