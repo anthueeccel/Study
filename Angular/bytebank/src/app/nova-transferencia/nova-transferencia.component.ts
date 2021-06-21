@@ -31,7 +31,7 @@ export class NovaTransferenciaComponent {
       (resultado) => {
       console.log(resultado);
       this.limparCampos();
-      this.router.navigateByUrl('extrato')
+      this.router.navigateByUrl('extrato');
 
     },
     (error) => console.error(error)
